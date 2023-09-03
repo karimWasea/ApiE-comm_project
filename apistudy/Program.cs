@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using ServiceStack.Text;
 
+using System.Configuration;
 using System.Text;
 
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -27,6 +28,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //builder.Services.AddTransient<IHostingEnvironment, HostingEnvironment>();
 builder.Services.AddScoped<HostingEnvironment>();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IMailingService, MailingService>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
 
