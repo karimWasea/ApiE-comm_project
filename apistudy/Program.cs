@@ -3,6 +3,7 @@ using apistudy.Models;
 using apistudy.Models.Entityies;
 using apistudy.Servesess;
 using apistudy.Seting;
+using apistudy.Utillites;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +41,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityDBConnec
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<CategoryServess>();
+builder.Services.AddScoped<ProductServess>();
+builder.Services.AddScoped<FileUploadService>();
 builder.Services.AddScoped<Unitofwork>();
 
 

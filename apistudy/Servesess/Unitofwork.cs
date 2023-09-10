@@ -10,8 +10,9 @@ namespace apistudy.Servesess
     {
         public readonly AppIdentityDbContext _context;
 
-        public Unitofwork(AppIdentityDbContext context, CategoryServess categoryServess)
+        public Unitofwork(AppIdentityDbContext context, CategoryServess categoryServess  , ProductServess productServess)
         {
+             Product =productServess;
             Categories = categoryServess;
 
             _context = context;
