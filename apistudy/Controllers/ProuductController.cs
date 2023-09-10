@@ -23,6 +23,7 @@ namespace apistudy.Controllers
   
     using apistudy.Models.Detos;
     using static System.Net.Mime.MediaTypeNames;
+    using apistudy.Servesess;
 
     namespace YourProjectName.Controllers
     {
@@ -30,69 +31,31 @@ namespace apistudy.Controllers
         [Route("api/[controller]")]
         public class ProductsController : ControllerBase
         {
-             private readonly IWebHostEnvironment _webHostEnvironment;
+            private readonly Unitofwork _unitofwork;
 
-            private readonly AppIdentityDbContext _context;
-
-            public ProductsController(AppIdentityDbContext context , IWebHostEnvironment webHostEnvironment)
+            public ProductsController(Unitofwork unitofwork)
             {
-                _context = context;
-                _webHostEnvironment = webHostEnvironment;
+                _unitofwork = unitofwork;
             }
             [HttpGet]
-            public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
+            public ActionResult<IEnumerable<ProductDto>> GetProducts()
             {
-                var categories = await _context.Categories.ToListAsync(); // Fetch categories
+                //var categories = await _context.Categories.ToListAsync(); // Fetch categories
 
-                var products = await _context.Products
-                    .Select(product => new ProductDto
-                    {
-                        Id = product.Id,
-                        Title = product.Title,
-                        Description = product.Description,
-                        Price = product.Price,
-                        Image = product.Image,
-                        CategoryId = product.CategoryId,
-                        Quantity = product.Quantity,
-                        Offer = product.Offer,
-                        CategoryName=product.Category.Title,
-            })
-                    .ToListAsync();
+                var products = _unitofwork.Product.GetAllAsync();
 
-                // Attach category names to products
-                //foreach (var product in products)
-                //{
-                //    var category = categories.FirstOrDefault(c => c.Id == product.CategoryId);
-                //    if (category != null)
-                //    {
-                //        product.CategoryName = category.Title;
-                //    }
-                //}
+
+
 
                 return Ok(products);
             }
 
             [HttpGet("{id}")]
-            public async Task<ActionResult<ProductDto>> GetProduct(int id)
+            public ActionResult<ProductDto> GetProduct(int id)
             {
-                var categories = await _context.Categories.ToListAsync(); // Fetch categories
 
-                var product = await _context.Products
-                    .Where(p => p.Id == id)
-                    .Select(product => new ProductDto
-                    {
-                        Id = product.Id,
-                        Title = product.Title,
-                        Description = product.Description,
-                        Price = product.Price,
-                        Image = product.Image,
-                        CategoryId = product.CategoryId,
-                        Quantity = product.Quantity,
-                        Offer = product.Offer  ,  
-                        CategoryName = product.Category.Title,
+                var product = _unitofwork.Product.GetByIdAsync(id);
 
-                    })
-                    .FirstOrDefaultAsync();
 
                 if (product == null)
                 {
@@ -110,120 +73,105 @@ namespace apistudy.Controllers
             }
 
             [HttpPost]
-            public async Task<ActionResult<ProductDto>> CreateProduct([FromForm] ProductCreateDto productCreateDto)
+            public ActionResult<ProductCreateDto> CreateProduct([FromForm] ProductCreateDto productCreateDto)
             {
-                var product = new Product
-                {
-                    Title = productCreateDto.Title,
-                    Description = productCreateDto.Description,
-                    Price = productCreateDto.Price,
-                    CategoryId = productCreateDto.CategoryId,
-                    Quantity = productCreateDto.Quantity,
-                    Offer = productCreateDto.Offer
-                    ,
-                    Image = await SaveImage(productCreateDto.Image),
+                //var product = new Product
+                //{
+                //    Title = productCreateDto.Title,
+                //    Description = productCreateDto.Description,
+                //    Price = productCreateDto.Price,
+                //    CategoryId = productCreateDto.CategoryId,
+                //    Quantity = productCreateDto.Quantity,
+                //    Offer = productCreateDto.Offer
+                //    ,
+                //    Image = await SaveImage(productCreateDto.Image),
 
-                };
+                //};
+
+
+
+
+
+
+
+
+
 
                 //if (productCreateDto.Image != null)
                 //{
                 //    product.Image = await SaveImage(productCreateDto.Image);
                 //}
 
-                _context.Products.Add(product);
-                await _context.SaveChangesAsync();
+                //_context.Products.Add(product);
+                //await _context.SaveChangesAsync();
 
-                var productDto = new ProductDto
-                {
-                    Id = product.Id,
-                    Title = product.Title,
-                    Description = product.Description,
-                    Price = product.Price,
-                    Image = product.Image,
-                    CategoryId = product.CategoryId,
-                    Quantity = product.Quantity,
-                    Offer = product.Offer
-                };
-
-                return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, productDto);
+                //var productDto = new ProductDto
+                //{
+                //    Id = product.Id,
+                //    Title = product.Title,
+                //    Description = product.Description,
+                //    Price = product.Price,
+                //    Image = product.Image,
+                //    CategoryId = product.CategoryId,
+                //    Quantity = product.Quantity,
+                //    Offer = product.Offer
+                //};
+                var existingProduct = _unitofwork.Product.Save(productCreateDto);
+                return CreatedAtAction(nameof(GetProduct), new { id = existingProduct.Id }, existingProduct);
             }
 
             [HttpPut("{id}")]
-            public async Task<IActionResult> UpdateProduct(int id, [FromForm] ProductCreateDto updatedProductDto)
+            public ActionResult<ProductCreateDto> UpdateProduct(int id, [FromForm] ProductCreateDto updatedProductDto)
             {
-                var existingProduct = await _context.Products.FindAsync(id);
 
-                if (existingProduct == null)
-                {
-                    return NotFound();
-                }
 
-                UpdateProductProperties(existingProduct, updatedProductDto);
+                //UpdateProductProperties(existingProduct, updatedProductDto);
 
-                if (updatedProductDto.Image != null)
-                {
-                    existingProduct.Image = await SaveImage(updatedProductDto.Image);
-                }
+                //if (updatedProductDto.Image != null)
+                //{
+                //    existingProduct.Image = await SaveImage(updatedProductDto.Image);
+                //}
 
-                await _context.SaveChangesAsync();
-
+                //await _context.SaveChangesAsync();
+                var existingProduct = _unitofwork.Product.Save(updatedProductDto);
                 return Ok(existingProduct);
             }
 
             [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteProduct(int id)
+            public IActionResult DeleteProduct(int id)
             {
-                var product = await _context.Products.FindAsync(id);
+                //var product = await _context.Products.FindAsync(id);
 
-                if (product == null)
-                {
-                    return NotFound();
-                }
+                //if (product == null)
+                //{
+                //    return NotFound();
+                //}
 
-                if (!string.IsNullOrEmpty(product.Image))
-                {
-                    DeleteImage(product.Image);
-                }
+                //if (!string.IsNullOrEmpty(product.Image))
+                //{
+                //    DeleteImage(product.Image);
+                //}
 
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-
+                //_context.Products.Remove(product);
+                //await _context.SaveChangesAsync();
+                _unitofwork.Product.DeleteAsync(id);
                 return NoContent();
             }
 
-            private void UpdateProductProperties(Product existingProduct, ProductCreateDto updatedProductDto)
-            {
-                existingProduct.Title = updatedProductDto.Title;
-                existingProduct.Description = updatedProductDto.Description;
-                existingProduct.Price = updatedProductDto.Price;
-                existingProduct.CategoryId = updatedProductDto.CategoryId;
-                existingProduct.Quantity = updatedProductDto.Quantity;
-                existingProduct.Offer = updatedProductDto.Offer;
-            }
+            //private void UpdateProductProperties(Product existingProduct, ProductCreateDto updatedProductDto)
+            //{
+            //    existingProduct.Title = updatedProductDto.Title;
+            //    existingProduct.Description = updatedProductDto.Description;
+            //    existingProduct.Price = updatedProductDto.Price;
+            //    existingProduct.CategoryId = updatedProductDto.CategoryId;
+            //    existingProduct.Quantity = updatedProductDto.Quantity;
+            //    existingProduct.Offer = updatedProductDto.Offer;
+            //}
 
-            private async Task<string> SaveImage(IFormFile image)
-            {
-                var imageName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-                var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", imageName);
 
-                using (var stream = new FileStream(imagePath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-
-                return "images/"+imageName;
-            }
-
-            private void DeleteImage(string imagePath)
-            {
-                var fullPath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
-                if (System.IO.File.Exists(fullPath))
-                {
-                    System.IO.File.Delete(fullPath);
-                }
-            }
         }
     }
+    
 
 }
 

@@ -1,18 +1,33 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using apistudy.Models.Entityies;
+using apistudy.Utillites;
+
+using Microsoft.AspNetCore.Http;
+
+using System.Text.Json.Serialization;
 
 namespace apistudy.Models.Detos
 {
     public class ProductDto
     {
+        //      public static FileUploadService _fileUploadService;
+        //       public ProductDto(FileUploadService fileUploadService)
+        //{
+        //          _fileUploadService = fileUploadService;
+        //      }
+
         public int Id { get; set; }
+        public int productimgidId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public string Image { get; set; }
+        public List<string> Images { get; set; } = new List<string>();
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int Quantity { get; set; }
         public decimal Offer { get; set; }
+
+
+
 
     }
 
@@ -23,20 +38,35 @@ namespace apistudy.Models.Detos
         public decimal Price { get; set; }
         public int CategoryId { get; set; }
         public int Quantity { get; set; }
-        public IFormFile Image { get; set; }
+        //public IFormFile Image { get; set; }
         public decimal Offer { get; set; }
+        [JsonIgnore]
+        public int Id { get; set; }
+        [JsonIgnore]
+
+        public int productimgidId { get; set; }
+
+        public IFormFileCollection IFormFileCollectionImageUrls { get; set; }
+        public static Product ConvertdetoTceatedobject(ProductCreateDto entity)
+        {
+            //var imgesuloded = FileUploadService.UploadFiles(entity.IFormFileCollectionImageUrls);
+
+
+            return new Product
+            {
+                Id = entity.Id,
+
+                Title = entity.Title,
+                Description = entity.Description,
+                Price = entity.Price,
+                //ProductImages = imgesuloded.Select(imgUrls=>imgUrls).ToList(),
+                CategoryId = entity.CategoryId,
+                Offer = entity.Offer,
+                Quantity = entity.Quantity,
+
+            };
+        }
+
     }
-
-    //public class ProductUpdateDto
-    //{
-    //    public string Title { get; set; }
-    //    public string Description { get; set; }
-    //    public decimal Price { get; set; }
-    //    public int CategoryId { get; set; }
-    //    public int Quantity { get; set; }
-    //    public IFormFile Image { get; set; }
-    //    public decimal Offer { get; set; }
-    //}
-
 
 }

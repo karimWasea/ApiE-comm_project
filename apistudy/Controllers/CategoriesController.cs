@@ -63,7 +63,7 @@ namespace apistudy.Controllers
                 //        ProductTitles = category.Products.Select(p => p.Description).ToList()
                 //    })
                 //    .FirstOrDefaultAsync();
-                var category = await _Unitofwork.Categories.GetByIdAsync(id);
+                var category =   _Unitofwork.Categories.GetByIdAsync(id);
                 if (category == null)
                 {
                     return NotFound();

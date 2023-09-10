@@ -6,6 +6,7 @@ namespace apistudy.interfaces
     {
 
 
+        CategoryDto Save(CategoryDto entity);
 
 
     }

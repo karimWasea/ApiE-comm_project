@@ -7,10 +7,9 @@
 
     public interface IRepositoryService<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> GetAllAsync();
-        Task<TEntity> GetByIdAsync(int id);
+        IEnumerable<TEntity> GetAllAsync();
+        TEntity GetByIdAsync(int id);
         //Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
-        Task<TEntity> Save(TEntity entity);
-        Task<TEntity> DeleteAsync(int id);
+        TEntity DeleteAsync(int id);
     }
 }

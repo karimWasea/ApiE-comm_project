@@ -9,41 +9,43 @@ namespace apistudy.Servesess
     public class CategoryServess : ICategories
     {
         public readonly AppIdentityDbContext _dbContext;
-        public CategoryServess(AppIdentityDbContext _dbContext )
+        public CategoryServess(AppIdentityDbContext _dbContext)
         {
             this._dbContext = _dbContext;
         }
-        public async Task<CategoryDto> DeleteAsync(int id)
+        public CategoryDto DeleteAsync(int id)
         {
-            var category = await _dbContext.Categories.FindAsync(id);
+            var category =
+                _dbContext.Categories.Find(id);
 
 
 
-         var entity =    _dbContext.Categories.Remove(category);
-            await _dbContext.SaveChangesAsync();
-            return await GetByIdAsync(entity.Entity.Id);
+            var entity =
+                   _dbContext.Categories.Remove(category);
+            _dbContext.SaveChanges();
+            return GetByIdAsync(entity.Entity.Id);
         }
 
-        public  async Task<IEnumerable<CategoryDto>> GetAllAsync()
+        public IEnumerable<CategoryDto> GetAllAsync()
         {
-            var categories = await _dbContext.Categories
+            var categories = _dbContext.Categories
                      .Include(c => c.Products)
                      .Select(category => new CategoryDto
                      {
                          Id = category.Id,
                          Title = category.Title,
                          Description = category.Description,
-                         ProductNames = category.Products.Select(p => p.Title).ToList(),
-                         ProductTitles = category.Products.Select(p => p.Description).ToList()
+                         //ProductNames = category.Products.Select(p => p.Title).ToList(),
+                         //ProductTitles = category.Products.Select(p => p.Description).ToList()
                      })
-                     .ToListAsync();
-             return  categories;
+                     .ToList();
+            return categories;
         }
 
-        public async Task<CategoryDto> GetByIdAsync(int id)
+        public CategoryDto GetByIdAsync(int id)
         {
 
-            var category = await _dbContext.Categories
+            var category = _dbContext.Categories
                 .Include(c => c.Products)
                 .Where(c => c.Id == id)
                 .Select(category => new CategoryDto
@@ -51,21 +53,22 @@ namespace apistudy.Servesess
                     Id = category.Id,
                     Title = category.Title,
                     Description = category.Description,
-                    ProductNames = category.Products.Select(p => p.Title).ToList(),
-                    ProductTitles = category.Products.Select(p => p.Description).ToList()
+                    //ProductNames = category.Products.Select(p => p.Title).ToList(),
+                    //ProductTitles = category.Products.Select(p => p.Description).ToList()
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
             return category;
         }
 
-        public  Task<CategoryDto> Save(CategoryDto entity)
+        public
+            CategoryDto Save(CategoryDto entity)
         {
-          var savedmodel=  CategoryDto.ConvertdetoTceatedobject(entity);
+            var savedmodel = CategoryDto.ConvertdetoTceatedobject(entity);
             if (entity.Id > 0)
             {
-              var Entity=  _dbContext.Categories.Update(savedmodel);
-_dbContext.SaveChanges();
-                return  GetByIdAsync(Entity.Entity.Id);
+                var Entity = _dbContext.Categories.Update(savedmodel);
+                _dbContext.SaveChanges();
+                return GetByIdAsync(Entity.Entity.Id);
 
             }
             else
@@ -73,7 +76,8 @@ _dbContext.SaveChanges();
 
                 var Entity = _dbContext.Categories.Add(savedmodel);
                 _dbContext.SaveChanges();
-                return  GetByIdAsync(Entity.Entity.Id);
+                return
+                    GetByIdAsync(Entity.Entity.Id);
 
 
             }

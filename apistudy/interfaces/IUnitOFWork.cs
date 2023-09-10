@@ -2,10 +2,10 @@
 
 namespace apistudy.interfaces
 {
-    public interface IUnitOFWork :IDisposable
+    public interface IUnitOFWork : IDisposable
     {
 
-
-        ICategories Categories { get; } 
+        IProduct Product { get; }
+        ICategories Categories { get; }
     }
 }
