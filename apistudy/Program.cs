@@ -39,6 +39,8 @@ builder.Services.AddDbContext<AppIdentityDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityDBConnection")));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<CategoryServess>();
+builder.Services.AddScoped<Unitofwork>();
 
 
 
