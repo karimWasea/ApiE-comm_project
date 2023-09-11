@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 using Ecommerce_Api.interfaces;
-using Ecommerce_Api.Models.Entityies;
 
 using Microsoft.EntityFrameworkCore;
 
