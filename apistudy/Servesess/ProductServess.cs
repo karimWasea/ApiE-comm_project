@@ -27,7 +27,7 @@ namespace apistudy.Servesess
         {
             var Product =
                 _dbContext.Products.Find(id);
-            var listofimges = Product.ProductImages.Where(p => p.ProductId == id).ToList();
+            var listofimges = _dbContext.ProductImages.Where(p => p.ProductId == id).ToList();
             foreach (var item in listofimges)
             {
                 if (!string.IsNullOrEmpty(item.ImageUrl))
@@ -62,9 +62,11 @@ namespace apistudy.Servesess
                          Quantity = product.Quantity,
                          Offer = product.Offer,
                          CategoryName = product.Category.Title,
+                         productimgidId=product.ProductImages.Select(p=>p.ProductId).ToList(),
+
 
                      })
-                     .ToList();
+                     .ToList().DefaultIfEmpty();
             return categories;
         }
 
@@ -87,6 +89,9 @@ namespace apistudy.Servesess
                     Offer = product.Offer,
                     CategoryName = product.Category.Title,
                     Images = product.ProductImages.Select(r => r.ImageUrl).ToList(),
+
+                    productimgidId = product.ProductImages.Select(p => p.ProductId).ToList(),
+
                 })
                 .FirstOrDefault();
             return product;

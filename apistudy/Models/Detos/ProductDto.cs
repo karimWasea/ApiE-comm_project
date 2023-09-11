@@ -16,15 +16,15 @@ namespace apistudy.Models.Detos
         //      }
 
         public int Id { get; set; }
-        public int productimgidId { get; set; }
+        public   List< int> productimgidId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public double Price { get; set; }
         public List<string> Images { get; set; } = new List<string>();
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int Quantity { get; set; }
-        public decimal Offer { get; set; }
+        public double Offer { get; set; }
 
 
 
@@ -35,11 +35,11 @@ namespace apistudy.Models.Detos
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public double Price { get; set; }
         public int CategoryId { get; set; }
         public int Quantity { get; set; }
         //public IFormFile Image { get; set; }
-        public decimal Offer { get; set; }
+        public double Offer { get; set; }
         [JsonIgnore]
         public int Id { get; set; }
         [JsonIgnore]

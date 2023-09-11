@@ -40,7 +40,7 @@ namespace apistudy.Controllers
             [HttpGet]
             public ActionResult<IEnumerable<ProductDto>> GetProducts()
             {
-                //var categories = await _context.Categories.ToListAsync(); // Fetch categories
+
 
                 var products = _unitofwork.Product.GetAllAsync();
 
@@ -62,12 +62,7 @@ namespace apistudy.Controllers
                     return NotFound();
                 }
 
-                //// Attach category name to the product
-                //var category = categories.FirstOrDefault(c => c.Id == product.CategoryId);
-                //if (category != null)
-                //{
-                //    product.CategoryName = category.Title;
-                //}
+              
 
                 return Ok(product);
             }
@@ -75,18 +70,7 @@ namespace apistudy.Controllers
             [HttpPost]
             public ActionResult<ProductCreateDto> CreateProduct([FromForm] ProductCreateDto productCreateDto)
             {
-                //var product = new Product
-                //{
-                //    Title = productCreateDto.Title,
-                //    Description = productCreateDto.Description,
-                //    Price = productCreateDto.Price,
-                //    CategoryId = productCreateDto.CategoryId,
-                //    Quantity = productCreateDto.Quantity,
-                //    Offer = productCreateDto.Offer
-                //    ,
-                //    Image = await SaveImage(productCreateDto.Image),
-
-                //};
+              
 
 
 
@@ -94,28 +78,7 @@ namespace apistudy.Controllers
 
 
 
-
-
-
-                //if (productCreateDto.Image != null)
-                //{
-                //    product.Image = await SaveImage(productCreateDto.Image);
-                //}
-
-                //_context.Products.Add(product);
-                //await _context.SaveChangesAsync();
-
-                //var productDto = new ProductDto
-                //{
-                //    Id = product.Id,
-                //    Title = product.Title,
-                //    Description = product.Description,
-                //    Price = product.Price,
-                //    Image = product.Image,
-                //    CategoryId = product.CategoryId,
-                //    Quantity = product.Quantity,
-                //    Offer = product.Offer
-                //};
+          
                 var existingProduct = _unitofwork.Product.Save(productCreateDto);
                 return CreatedAtAction(nameof(GetProduct), new { id = existingProduct.Id }, existingProduct);
             }
@@ -125,14 +88,6 @@ namespace apistudy.Controllers
             {
 
 
-                //UpdateProductProperties(existingProduct, updatedProductDto);
-
-                //if (updatedProductDto.Image != null)
-                //{
-                //    existingProduct.Image = await SaveImage(updatedProductDto.Image);
-                //}
-
-                //await _context.SaveChangesAsync();
                 var existingProduct = _unitofwork.Product.Save(updatedProductDto);
                 return Ok(existingProduct);
             }
@@ -140,33 +95,12 @@ namespace apistudy.Controllers
             [HttpDelete("{id}")]
             public IActionResult DeleteProduct(int id)
             {
-                //var product = await _context.Products.FindAsync(id);
-
-                //if (product == null)
-                //{
-                //    return NotFound();
-                //}
-
-                //if (!string.IsNullOrEmpty(product.Image))
-                //{
-                //    DeleteImage(product.Image);
-                //}
-
-                //_context.Products.Remove(product);
-                //await _context.SaveChangesAsync();
+                
                 _unitofwork.Product.DeleteAsync(id);
                 return NoContent();
             }
 
-            //private void UpdateProductProperties(Product existingProduct, ProductCreateDto updatedProductDto)
-            //{
-            //    existingProduct.Title = updatedProductDto.Title;
-            //    existingProduct.Description = updatedProductDto.Description;
-            //    existingProduct.Price = updatedProductDto.Price;
-            //    existingProduct.CategoryId = updatedProductDto.CategoryId;
-            //    existingProduct.Quantity = updatedProductDto.Quantity;
-            //    existingProduct.Offer = updatedProductDto.Offer;
-            //}
+      
 
 
         }
