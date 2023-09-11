@@ -6,6 +6,8 @@ using apistudy.Servesess;
 using apistudy.Seting;
 using apistudy.Utillites;
 
+using Ecommerce_Api.interfaces;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +49,7 @@ builder.Services.AddScoped<FileUploadService>();
 builder.Services.AddScoped<Unitofwork>();
 //builder.Services.AddScoped<AllowedExtensionsAttribute>();
 //builder.Services.AddScoped<MaxFileSizeAttribute>();
+builder.Services.AddScoped(typeof(IPaginationService<>), typeof(PaginationService<>));
 
 
 
