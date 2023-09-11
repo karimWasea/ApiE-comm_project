@@ -1,8 +1,11 @@
-﻿using apistudy.Models.Entityies;
+﻿using apistudy.Atrubuts;
+using apistudy.Models.Entityies;
+using apistudy.Seting;
 using apistudy.Utillites;
 
 using Microsoft.AspNetCore.Http;
 
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace apistudy.Models.Detos
@@ -33,11 +36,22 @@ namespace apistudy.Models.Detos
 
     public class ProductCreateDto
     {
+        [Required]
         public string Title { get; set; }
+        [Required]
+
         public string Description { get; set; }
+        [Required]
+
         public double Price { get; set; }
+        [Required]
+
         public int CategoryId { get; set; }
+        [Required]
+
         public int Quantity { get; set; }
+        [Required]
+
         //public IFormFile Image { get; set; }
         public double Offer { get; set; }
         [JsonIgnore]
@@ -45,7 +59,9 @@ namespace apistudy.Models.Detos
         [JsonIgnore]
 
         public int productimgidId { get; set; }
-
+        [AllowedExtensions(FileSettings.AllowedExtensions),
+         MaxFileSize(FileSettings.MaxFileSizeInBytes)]
+        [Required]
         public IFormFileCollection IFormFileCollectionImageUrls { get; set; }
         public static Product ConvertdetoTceatedobject(ProductCreateDto entity)
         {

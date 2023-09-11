@@ -1,3 +1,4 @@
+using apistudy.Atrubuts;
 using apistudy.interfaces;
 using apistudy.Models;
 using apistudy.Models.Entityies;
@@ -44,6 +45,8 @@ builder.Services.AddScoped<CategoryServess>();
 builder.Services.AddScoped<ProductServess>();
 builder.Services.AddScoped<FileUploadService>();
 builder.Services.AddScoped<Unitofwork>();
+//builder.Services.AddScoped<AllowedExtensionsAttribute>();
+//builder.Services.AddScoped<MaxFileSizeAttribute>();
 
 
 

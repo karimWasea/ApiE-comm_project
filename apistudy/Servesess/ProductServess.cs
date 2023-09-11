@@ -62,7 +62,7 @@ namespace apistudy.Servesess
                          Quantity = product.Quantity,
                          Offer = product.Offer,
                          CategoryName = product.Category.Title,
-                         productimgidId=product.ProductImages.Select(p=>p.ProductId).ToList(),
+                         productimgidId = product.ProductImages.Select(p => p.Id).ToList(),
 
 
                      })
@@ -90,7 +90,7 @@ namespace apistudy.Servesess
                     CategoryName = product.Category.Title,
                     Images = product.ProductImages.Select(r => r.ImageUrl).ToList(),
 
-                    productimgidId = product.ProductImages.Select(p => p.ProductId).ToList(),
+                    productimgidId = product.ProductImages.Select(p => p.Id).ToList(),
 
                 })
                 .FirstOrDefault();
