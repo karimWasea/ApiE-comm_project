@@ -4,6 +4,8 @@ using apistudy.Models.Detos;
 using apistudy.Models.Entityies;
 using apistudy.Utillites;
 
+using Ecommerce_Api.interfaces;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,7 +15,7 @@ using ServiceStack;
 
 namespace apistudy.Servesess
 {
-    public class ProductServess : IProduct
+    public class ProductServess : PaginationHelper<ProductDto>, IProduct
     {
         public FileUploadService _fileUploadService;
 

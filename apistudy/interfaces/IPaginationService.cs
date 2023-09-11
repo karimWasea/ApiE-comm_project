@@ -1,17 +1,17 @@
 ﻿namespace Ecommerce_Api.interfaces
 {
     using Braintree;
+
+    using PagedList;
     // Services/IPaginationService.cs
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-  
 
-    public interface IPaginationService<TEntity> where TEntity : class
+    public interface IPaginationHelper<T>
     {
-        Task<PaginatedResult<TEntity>> GetPaginatedResultsAsync(int page, int pageSize);
+        IPagedList<T> GetPagedData<T>(IEnumerable<T> data, int pagenumber);
     }
-
 
 
 }

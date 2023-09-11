@@ -49,7 +49,7 @@ builder.Services.AddScoped<FileUploadService>();
 builder.Services.AddScoped<Unitofwork>();
 //builder.Services.AddScoped<AllowedExtensionsAttribute>();
 //builder.Services.AddScoped<MaxFileSizeAttribute>();
-builder.Services.AddScoped(typeof(IPaginationService<>), typeof(PaginationService<>));
+//builder.Services.AddScoped(typeof(IPaginationService<>), typeof(PaginationService<>));
 
 
 

@@ -24,6 +24,9 @@ namespace apistudy.Controllers
     using apistudy.Models.Detos;
     using static System.Net.Mime.MediaTypeNames;
     using apistudy.Servesess;
+    using apistudy.interfaces;
+    using Ecommerce_Api.interfaces;
+    using PagedList;
 
     namespace YourProjectName.Controllers
     {
@@ -38,16 +41,16 @@ namespace apistudy.Controllers
                 _unitofwork = unitofwork;
             }
             [HttpGet]
-            public ActionResult<IEnumerable<ProductDto>> GetProducts()
+            public ActionResult<IPagedList<ProductDto>> GetPaginatedProducts(int pageNumber = 1)
             {
+              
+                // Assuming you have an IQueryable source of products (e.g., _unitOfWork.Product.GetAllAsQueryable())
+                IEnumerable<ProductDto>? products = _unitofwork.Product.GetAllAsync();
 
+                // Use the PaginationHelper to get paginated data
+                var pagedProducts = _unitofwork.Product.GetPagedData(products, pageNumber);
 
-                var products = _unitofwork.Product.GetAllAsync();
-
-
-
-
-                return Ok(products);
+                return Ok(pagedProducts);
             }
 
             [HttpGet("{id}")]

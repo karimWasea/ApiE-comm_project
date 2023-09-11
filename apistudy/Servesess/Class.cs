@@ -5,48 +5,33 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
+using Ecommerce_Api.interfaces;
 using Ecommerce_Api.Models.Entityies;
 
 using Microsoft.EntityFrameworkCore;
+
+using PagedList;
+
 namespace apistudy.Servesess
 {
-    public class PaginationService<TEntity>
+    public class PaginationHelper<T> : IPaginationHelper<T> where T : class
     {
-        private readonly IQueryable<TEntity> _queryable;
-
-        public PaginationService(IQueryable<TEntity> queryable)
+        public IPagedList<T> GetPagedData<T>(IEnumerable<T> data, int pageNumber)
         {
-            _queryable = queryable;
-        }
+            int pageSize = 10; // Set the page size to 10
+            int totalItemCount = data.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)pageSize);
 
-        public async Task<PaginatedResult<TEntity>> GetPaginatedResultsAsync(int page, int pageSize)
-        {
-            if (page < 1)
-            {
-                page = 1;
-            }
+            pageNumber = Math.Max(1, Math.Min(totalPages, pageNumber));
 
-            if (pageSize < 1)
-            {
-                pageSize = 10;
-            }
+            int startIndex = (pageNumber - 1) * pageSize;
+            int endIndex = Math.Min(startIndex + pageSize - 1, totalItemCount - 1);
 
-            var totalItems = await _queryable.CountAsync();
-            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            var pagedData = data.Skip(startIndex).Take(pageSize).ToList();
 
-            var items = await _queryable
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            return new StaticPagedList<T>(pagedData, pageNumber, pageSize, totalItemCount);
 
-            return new PaginatedResult<TEntity>
-            {
-                TotalItems = totalItems,
-                TotalPages = totalPages,
-                CurrentPage = page,
-                PageSize = pageSize,
-                Items = items
-            };
+
         }
     }
 

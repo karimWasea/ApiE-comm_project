@@ -23,6 +23,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
     <PackageReference Include="MimeKit" Version="4.2.0" />
+    <PackageReference Include="PagedList" Version="1.17.0" />
     <PackageReference Include="ServiceStack.Text" Version="6.10.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.2" />
