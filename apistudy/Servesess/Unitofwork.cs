@@ -10,9 +10,10 @@ namespace apistudy.Servesess
     {
         public readonly AppIdentityDbContext _context;
 
-        public Unitofwork(AppIdentityDbContext context, CategoryServess categoryServess  , ProductServess productServess)
+        public Unitofwork(AppIdentityDbContext context, CategoryServess categoryServess  , ProductServess productServess , ShopingCartServess shopingCartServess)
         {
-             Product =productServess;
+            shopingCart =  shopingCartServess ;
+            Product =productServess;
             Categories = categoryServess;
 
             _context = context;
@@ -27,6 +28,7 @@ namespace apistudy.Servesess
 
         public ICategories Categories { get; }
         public IProduct Product { get; }
+        public IShopingCart shopingCart { get; }
 
         protected virtual void Dispose(bool disposing)
         {

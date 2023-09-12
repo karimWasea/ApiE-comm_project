@@ -8,7 +8,7 @@ using apistudy.Models;
 
 #nullable disable
 
-namespace apistudy.Migrations
+namespace Ecommerce_Api.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
     partial class AppIdentityDbContextModelSnapshot : ModelSnapshot

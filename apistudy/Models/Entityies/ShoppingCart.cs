@@ -18,7 +18,7 @@ namespace apistudy.Models.Entityies
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]
         public ApplicationUser applicationUser { get; set; }
-        [NotMapped]
-        public double Price { get; set; }
+        //[NotMapped]
+        public double Price => product?.Price * Count ?? 0; // Ensure Product is not null
     }
 }

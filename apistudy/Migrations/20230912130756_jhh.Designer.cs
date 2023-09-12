@@ -9,11 +9,11 @@ using apistudy.Models;
 
 #nullable disable
 
-namespace apistudy.Migrations
+namespace Ecommerce_Api.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20230910105200_jjj")]
-    partial class jjj
+    [Migration("20230912130756_jhh")]
+    partial class jhh
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -374,15 +374,11 @@ namespace apistudy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Offer")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("Offer")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -579,7 +575,7 @@ namespace apistudy.Migrations
             modelBuilder.Entity("apistudy.Models.Entityies.ProductImage", b =>
                 {
                     b.HasOne("apistudy.Models.Entityies.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductImages")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -609,6 +605,11 @@ namespace apistudy.Migrations
             modelBuilder.Entity("apistudy.Models.Entityies.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("apistudy.Models.Entityies.Product", b =>
+                {
+                    b.Navigation("ProductImages");
                 });
 #pragma warning restore 612, 618
         }
