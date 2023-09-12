@@ -94,60 +94,151 @@ namespace apistudy.Servesess
             return categories;
         }
 
+        //public CreatedShopingCartDto Save(CreatedShopingCartDto entity)
+        //{
+        //     var price= _dbContext.Products.FirstOrDefault(p => p.Id==entity.ProductId).Price;
+
+        //    entity.Price = entity.Count * price;
+        //    var Countbeforupdate = _dbContext.ShoppingCarts.FirstOrDefault(i => i.Id == entity.Id).Count;
+        //    var savedmodel = CreatedShopingCartDto.ConvertdetoTceatedobject(entity);
+        //    if (entity.Id > 0)
+        //    {
+
+
+
+
+        //        var Entity = _dbContext.ShoppingCarts.Update(savedmodel);
+        //        var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == Entity.Entity.ProductId);
+        //        _dbContext.SaveChanges();
+
+        //        //var CountofthiscartAfterupdate = Entity.Entity.Count;
+        //        if (entity.Count > Countbeforupdate)
+        //        {
+        //            productquntity.Quantity -= entity.Count;
+
+        //        }
+        //        else
+        //        {
+
+
+        //            productquntity.Quantity += entity.Count;
+
+        //        }
+
+        //        _dbContext.Products.Update(productquntity);
+        //        _dbContext.SaveChanges();
+
+
+
+        //        return entity;
+
+        //    }
         public CreatedShopingCartDto Save(CreatedShopingCartDto entity)
         {
-             var price= _dbContext.Products.FirstOrDefault(p => p.Id==entity.ProductId).Price;
+            // Find the price of the product with the given ProductId
+            var price = _dbContext.Products.FirstOrDefault(p => p.Id == entity.ProductId)?.Price;
 
-            entity.Price = entity.Count * price;
+            if (price == null)
+            {
+                // Handle the case where the product with the given ProductId doesn't exist.
+                // You may want to return an error or take appropriate action.
+                return null; // or throw an exception
+            }
 
-        var savedmodel = CreatedShopingCartDto.ConvertdetoTceatedobject(entity);
+            // Calculate the total price based on Count and Price per unit
+            entity.Price = entity.Count * price.Value;
+
             if (entity.Id > 0)
             {
+                // Update an existing ShoppingCart
+                var existingCart = _dbContext.ShoppingCarts.FirstOrDefault(i => i.Id == entity.Id);
 
-                var Countbeforupdate = _dbContext.ShoppingCarts.FirstOrDefault(i => i.Id==savedmodel.Id).Count;
-                var Entity = _dbContext.ShoppingCarts.Update(savedmodel);
-                var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == Entity.Entity.ProductId);
-                _dbContext.SaveChanges();
-
-                //var CountofthiscartAfterupdate = Entity.Entity.Count;
-                if (entity.Count > Countbeforupdate)
+                if (existingCart != null)
                 {
-                    productquntity.Quantity -= entity.Count;
+                    var CountBeforeUpdate = existingCart.Count;
 
+                    // Update the properties of the existingCart with values from savedmodel
+                    existingCart.Count = entity.Count;
+                    existingCart.Price = entity.Price;
+                    existingCart.Id = entity.Id;    
+                    // Save changes to the database
+                    _dbContext.SaveChanges();
+
+                    // Calculate the difference in Count and update Product Quantity accordingly
+                    var countDifference = entity.Count - CountBeforeUpdate;
+                    var product = _dbContext.Products.FirstOrDefault(i => i.Id == entity.ProductId);
+
+                    if (product != null)
+                    { if(entity.Count>CountBeforeUpdate)
+                        product.Quantity -= countDifference;
+
+                        // Save changes to update Product Quantity
+                        _dbContext.SaveChanges();
+                    } else {
+                        
+                        product.Quantity -= countDifference;
+                        _dbContext.SaveChanges();
+                    }
+
+                    return entity;
                 }
                 else
                 {
-
-
-                    productquntity.Quantity += entity.Count;
-
+                    // Handle the case where the ShoppingCart with the given Id doesn't exist.
+                    // You may want to return an error or take appropriate action.
+                    return null; // or throw an exception
                 }
-
-                _dbContext.Products.Update(productquntity);
-                _dbContext.SaveChanges();
-
-
-
-                return entity;
-
             }
             else
             {
+                // Create a new ShoppingCart
+                var newCart = new ShoppingCart
+                {
+                    // Set properties based on the CreatedShopingCartDto
+                    ProductId = entity.ProductId,
+                    Count = entity.Count,
+                    Price = entity.Price
+                };
 
-                var Entity = _dbContext.ShoppingCarts.Add(savedmodel);
+                // Add the new ShoppingCart to the context
+                _dbContext.ShoppingCarts.Add(newCart);
+
+                // Update Product Quantity
+                var product = _dbContext.Products.FirstOrDefault(i => i.Id == entity.ProductId);
+                if (product != null)
+                {
+                    product.Quantity -= entity.Count;
+
+                    // Save changes to update Product Quantity
+                    _dbContext.SaveChanges();
+                }
+
+                // Save changes to create the new ShoppingCart and update Product Quantity
                 _dbContext.SaveChanges();
-                var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == Entity.Entity.ProductId);
-                productquntity.Quantity -= Entity.Entity.Count;
-                _dbContext.Products.Update(productquntity);
+
+                // Return the newly created entity
+                return entity;
+            }
+        }
+        
+
+        //    else
+        //    {
+
+        //        var Entity = _dbContext.ShoppingCarts.Add(savedmodel);
+        //        _dbContext.SaveChanges();
+        //        var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == Entity.Entity.ProductId);
+        //        productquntity.Quantity -= Entity.Entity.Count;
+        //        _dbContext.Products.Update(productquntity);
           
 
-                _dbContext.SaveChanges();
+        //        _dbContext.SaveChanges();
 
-                return entity;
+        //        return entity;
 
-            }
+        //    }
 
-        }
+        //}
 
         public IEnumerable<ShopingCartDto> GetAllByUserId(string usrid)
         {

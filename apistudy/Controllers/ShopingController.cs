@@ -87,8 +87,8 @@ namespace apistudy.Controllers
             return CreatedAtAction(nameof(GetShoppingCart), new { id = existingProduct.Id }, existingProduct);
         }
 
-        [HttpPut("{id}")]
-        public ActionResult<CreatedShopingCartDto> UpdateProduct(int id, [FromForm] CreatedShopingCartDto updatedProductDto)
+        [HttpPut]
+        public ActionResult<CreatedShopingCartDto> UpdateProduct( [FromForm] CreatedShopingCartDto updatedProductDto)
         {
             var existingProduct = _unitofwork.shopingCart.Save(updatedProductDto);
             return CreatedAtAction(nameof(GetShoppingCart), new { id = existingProduct.Id }, existingProduct);
