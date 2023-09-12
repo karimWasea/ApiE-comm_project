@@ -12,8 +12,8 @@ using apistudy.Models;
 namespace Ecommerce_Api.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20230912132846_jhhl")]
-    partial class jhhl
+    [Migration("20230912165300_fgffl")]
+    partial class fgffl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

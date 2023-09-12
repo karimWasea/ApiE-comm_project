@@ -12,8 +12,8 @@ using apistudy.Models;
 namespace Ecommerce_Api.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20230912130756_jhh")]
-    partial class jhh
+    [Migration("20230912165138_fgff")]
+    partial class fgff
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -430,6 +430,9 @@ namespace Ecommerce_Api.Migrations
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
