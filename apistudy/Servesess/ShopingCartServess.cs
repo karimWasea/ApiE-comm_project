@@ -6,6 +6,7 @@ using apistudy.Utillites;
 
 using Ecommerce_Api.interfaces;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,12 +17,17 @@ using ServiceStack;
 namespace apistudy.Servesess
 {
     public class ShopingCartServess : PaginationHelper<ShopingCartDto>, IShopingCart
-    {
+    {//b0e51957-70a4-4fd9-87d6-b0e9882a7160
         public FileUploadService _fileUploadService;
+        IProduct _Product;
+        UserManager<ApplicationUser> _UserManager;
 
         public readonly AppIdentityDbContext _dbContext;
-        public ShopingCartServess(AppIdentityDbContext _dbContext, FileUploadService fileUploadService)
+        public ShopingCartServess(AppIdentityDbContext _dbContext, FileUploadService fileUploadService , ProductServess Product, UserManager<ApplicationUser> UserManager
+)
         {
+            _UserManager = UserManager;
+            _Product = Product;
             _fileUploadService = fileUploadService;
             this._dbContext = _dbContext;
         }
@@ -34,8 +40,9 @@ namespace apistudy.Servesess
 
 
             _dbContext.SaveChanges();
-            var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == model.Entity.ProductId).Quantity;
-            productquntity += model.Entity.Count;
+            var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == model.Entity.ProductId);
+            productquntity.Quantity += model.Entity.Count;
+            _dbContext.Products.Update(productquntity);
             _dbContext.SaveChanges();
 
 
@@ -89,30 +96,34 @@ namespace apistudy.Servesess
 
         public CreatedShopingCartDto Save(CreatedShopingCartDto entity)
         {
-            var savedmodel = CreatedShopingCartDto.ConvertdetoTceatedobject(entity);
+             var price= _dbContext.Products.FirstOrDefault(p => p.Id==entity.ProductId).Price;
+
+            entity.Price = entity.Count * price;
+
+        var savedmodel = CreatedShopingCartDto.ConvertdetoTceatedobject(entity);
             if (entity.Id > 0)
             {
 
-                var Countbeforupdate = _dbContext.ShoppingCarts.FirstOrDefault(i => i.Equals(savedmodel.Id)).Count;
+                var Countbeforupdate = _dbContext.ShoppingCarts.FirstOrDefault(i => i.Id==savedmodel.Id).Count;
                 var Entity = _dbContext.ShoppingCarts.Update(savedmodel);
-                var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == Entity.Entity.ProductId).Quantity;
+                var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == Entity.Entity.ProductId);
                 _dbContext.SaveChanges();
 
                 //var CountofthiscartAfterupdate = Entity.Entity.Count;
                 if (entity.Count > Countbeforupdate)
                 {
-                    productquntity -= entity.Count;
-
+                    productquntity.Quantity -= entity.Count;
 
                 }
                 else
                 {
 
 
-                    productquntity += entity.Count;
+                    productquntity.Quantity += entity.Count;
+
                 }
 
-
+                _dbContext.Products.Update(productquntity);
                 _dbContext.SaveChanges();
 
 
@@ -125,8 +136,11 @@ namespace apistudy.Servesess
 
                 var Entity = _dbContext.ShoppingCarts.Add(savedmodel);
                 _dbContext.SaveChanges();
-                var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == Entity.Entity.ProductId).Quantity;
-                productquntity -= Entity.Entity.Count;
+                var productquntity = _dbContext.Products.FirstOrDefault(i => i.Id == Entity.Entity.ProductId);
+                productquntity.Quantity -= Entity.Entity.Count;
+                _dbContext.Products.Update(productquntity);
+          
+
                 _dbContext.SaveChanges();
 
                 return entity;
@@ -167,7 +181,7 @@ namespace apistudy.Servesess
             var totalcount = _dbContext.ShoppingCarts.Where(p => p.ApplicationUserId==usrid).Select(p => p.Count).Sum();
             var totalpriccart = _dbContext.ShoppingCarts.Where(p => p.ApplicationUserId== usrid).Select(p => p.Price).Sum();
 
-            var categories = _dbContext.ShoppingCarts.Where(i=>i.ApplicationUserId== usrid)
+            var categories = _dbContext.ShoppingCarts.Where(i => i.ApplicationUserId == usrid)
                               .Include(c => c.applicationUser).Include(c => c.product)
                               .Select(product => new ShopingCartDto
                               {
@@ -175,6 +189,7 @@ namespace apistudy.Servesess
                                   ApplicationUserId = product.ApplicationUserId,
                                   TotalPriceoFcart = totalcount,
                                   TotalQantity = totalpriccart,
+                                  UserName = _UserManager.Users.FirstOrDefault(p => p.Id == usrid).UserName,
 
 
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using static ServiceStack.LicenseUtils;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace apistudy.Models.Detos
 {
@@ -34,6 +35,9 @@ namespace apistudy.Models.Detos
 
     public class CreatedShopingCartDto
     {
+        [JsonIgnore]
+        public double Price { get; set; }
+
         public int ProductId { get; set; }
         public int Id { get; set; }
 

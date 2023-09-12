@@ -9,6 +9,8 @@ namespace apistudy.interfaces
         Task<string> AddRoleAsync(AddRoleModel model);
         Task<AuthModel> RefreshTokenAsync(string token);
         Task<bool> RevokeTokenAsync(string token);
+        Task<IEnumerable<ApplicationUser>> GetAllusers();
+
 
     }
 }

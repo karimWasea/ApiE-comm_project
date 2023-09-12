@@ -1,6 +1,8 @@
 ﻿using apistudy.interfaces;
 using apistudy.Models.Entityies;
 
+using Braintree;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace apistudy.Controllers
@@ -70,6 +72,14 @@ namespace apistudy.Controllers
             return Ok(model);
         }
 
+        [HttpGet("GetAllusers")]
+        public async Task<IActionResult> GetAllusers()
+        {
+           var users= _authService.GetAllusers();
+
+            return Ok(users);
+
+        }
         [HttpGet("refreshToken")]
         public async Task<IActionResult> RefreshToken()
         {

@@ -125,7 +125,12 @@ namespace apistudy.Servesess
 
 
 
+         public   async Task< IEnumerable<ApplicationUser>> GetAllusers()
+        {
 
+
+            return  _userManager.Users.ToList();
+        }
 
 
 
