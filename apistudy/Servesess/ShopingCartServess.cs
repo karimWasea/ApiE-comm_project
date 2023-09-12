@@ -160,7 +160,7 @@ namespace apistudy.Servesess
                     // Update the properties of the existingCart with values from savedmodel
                     existingCart.Count = entity.Count;
                     existingCart.Price = entity.Price;
-                    existingCart.Id = entity.Id;    
+                    existingCart.Id = entity.Id;
                     // Save changes to the database
                     _dbContext.SaveChanges();
 
@@ -169,17 +169,24 @@ namespace apistudy.Servesess
                     var product = _dbContext.Products.FirstOrDefault(i => i.Id == entity.ProductId);
 
                     if (product != null)
-                    { if(entity.Count>CountBeforeUpdate)
-                        product.Quantity -= countDifference;
-
+                    {
+                        if (entity.Count > CountBeforeUpdate) { 
+                            product.Quantity -= countDifference;
+                            _dbContext.Update(product);
                         // Save changes to update Product Quantity
                         _dbContext.SaveChanges();
-                    } else {
-                        
-                        product.Quantity -= countDifference;
-                        _dbContext.SaveChanges();
                     }
+                    else
+                    {
 
+                        product.Quantity -= countDifference;
+                            _dbContext.Update(product);
+
+                            _dbContext.SaveChanges();
+                    }
+                    }
+                  
+                
                     return entity;
                 }
                 else
@@ -208,6 +215,7 @@ namespace apistudy.Servesess
                 if (product != null)
                 {
                     product.Quantity -= entity.Count;
+                    _dbContext.Update(product);
 
                     // Save changes to update Product Quantity
                     _dbContext.SaveChanges();
