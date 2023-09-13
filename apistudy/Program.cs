@@ -48,6 +48,8 @@ builder.Services.AddScoped<ProductServess>();
 builder.Services.AddScoped<FileUploadService>();
 builder.Services.AddScoped<Unitofwork>();
 builder.Services.AddScoped<ShopingCartServess>();
+builder.Services.AddScoped<OrderHederServess>();
+builder.Services.AddScoped<OrdeRDetailsSErvess>();
 //builder.Services.AddScoped<AllowedExtensionsAttribute>();
 //builder.Services.AddScoped<MaxFileSizeAttribute>();
 //builder.Services.AddScoped(typeof(IPaginationService<>), typeof(PaginationService<>));

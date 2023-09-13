@@ -12,8 +12,8 @@ using apistudy.Models;
 namespace Ecommerce_Api.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20230912165138_fgff")]
-    partial class fgff
+    [Migration("20230913093206_ddr")]
+    partial class ddr
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -271,8 +271,12 @@ namespace Ecommerce_Api.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("applicstionuser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -542,15 +546,13 @@ namespace Ecommerce_Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("apistudy.Models.Entityies.Product", "Product")
+                    b.HasOne("apistudy.Models.Entityies.ApplicationUser", "applicationUser")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("OrderHeader");
 
-                    b.Navigation("Product");
+                    b.Navigation("applicationUser");
                 });
 
             modelBuilder.Entity("apistudy.Models.Entityies.OrderHeader", b =>

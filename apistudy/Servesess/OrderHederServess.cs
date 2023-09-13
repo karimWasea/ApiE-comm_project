@@ -104,9 +104,36 @@ namespace apistudy.Servesess
             return product;
         }
 
-        public OrderHeaderDTO GetorderhederByuserId(int id)
+        public OrderHeaderDTO GetorderhederByuserId(string id)
         {
-            throw new NotImplementedException();
+            var product = _dbContext.OrderHeaders
+                .Include(c => c.ApplicationUser)
+  .Where(c => c.ApplicationUserId == id)
+                 .Select(dto => new OrderHeaderDTO
+                 {
+
+                     ApplicationUserId = dto.ApplicationUserId,
+                     OrderDate = dto.OrderDate,
+                     ShippingDate = dto.ShippingDate,
+                     OrderTotal = dto.OrderTotal,
+                     OrderStatus = dto.OrderStatus,
+                     PaymentStatus = dto.PaymentStatus,
+                     TrackingNumber = dto.TrackingNumber,
+                     Carrier = dto.Carrier,
+                     PaymentDate = dto.PaymentDate,
+                     PaymentDueDate = dto.PaymentDueDate,
+                     SessionId = dto.SessionId,
+                     PaymentIntentId = dto.PaymentIntentId,
+                     PhoneNumber = dto.PhoneNumber,
+                     StreetAddress = dto.StreetAddress,
+                     City = dto.City,
+                     State = dto.State,
+                     PostalCode = dto.PostalCode,
+                     Name = dto.Name
+
+                 })
+                 .FirstOrDefault();
+            return product;
         }
 
         public OrderHeaderDTO Save(OrderHeaderDTO entity)
