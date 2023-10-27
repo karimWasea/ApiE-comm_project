@@ -1,6 +1,8 @@
 ﻿using apistudy.interfaces;
 using apistudy.Models;
 
+using Ecommerce_Api.interfaces;
+
 namespace apistudy.Servesess
 {
     public class Unitofwork : IUnitOFWork
@@ -10,14 +12,15 @@ namespace apistudy.Servesess
     {
         public readonly AppIdentityDbContext _context;
 
-        public Unitofwork(AppIdentityDbContext context, CategoryServess categoryServess  , ProductServess productServess , ShopingCartServess shopingCartServess)
+        public Unitofwork(AppIdentityDbContext context, CategoryServess categoryServess  , ProductServess productServess , ShopingCartServess shopingCartServess , OrderHederServess orderHederServess , OrdeRDetailsSErvess ordeRDetailsSErvess)
         {
             shopingCart =  shopingCartServess ;
             Product =productServess;
             Categories = categoryServess;
 
             _context = context;
-
+            orderHeder=orderHederServess;
+            orderDetails = ordeRDetailsSErvess;
         }
 
 
@@ -29,6 +32,8 @@ namespace apistudy.Servesess
         public ICategories Categories { get; }
         public IProduct Product { get; }
         public IShopingCart shopingCart { get; }
+        public IOrderHeder orderHeder { get; }
+        public IorderDetails orderDetails { get; }
 
         protected virtual void Dispose(bool disposing)
         {

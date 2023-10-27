@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using apistudy.Models;
 
@@ -11,9 +12,11 @@ using apistudy.Models;
 namespace Ecommerce_Api.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    partial class AppIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230913093710_ddrk")]
+    partial class ddrk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,9 +271,6 @@ namespace Ecommerce_Api.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("Productid")
-                        .HasColumnType("int");
-
                     b.Property<string>("applicstionuserid")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -278,8 +278,6 @@ namespace Ecommerce_Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderHeaderId");
-
-                    b.HasIndex("Productid");
 
                     b.HasIndex("applicstionuserid");
 
@@ -545,12 +543,6 @@ namespace Ecommerce_Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("apistudy.Models.Entityies.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("Productid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("apistudy.Models.Entityies.ApplicationUser", "applicationUser")
                         .WithMany()
                         .HasForeignKey("applicstionuserid")
@@ -558,8 +550,6 @@ namespace Ecommerce_Api.Migrations
                         .IsRequired();
 
                     b.Navigation("OrderHeader");
-
-                    b.Navigation("Product");
 
                     b.Navigation("applicationUser");
                 });

@@ -12,8 +12,8 @@ using apistudy.Models;
 namespace Ecommerce_Api.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20230912165300_fgffl")]
-    partial class fgffl
+    [Migration("20230913095250_ddrkf")]
+    partial class ddrkf
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -271,14 +271,20 @@ namespace Ecommerce_Api.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("Productid")
                         .HasColumnType("int");
+
+                    b.Property<string>("applicstionuserid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderHeaderId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("Productid");
+
+                    b.HasIndex("applicstionuserid");
 
                     b.ToTable("OrderDetails");
                 });
@@ -544,13 +550,21 @@ namespace Ecommerce_Api.Migrations
 
                     b.HasOne("apistudy.Models.Entityies.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("Productid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("apistudy.Models.Entityies.ApplicationUser", "applicationUser")
+                        .WithMany()
+                        .HasForeignKey("applicstionuserid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("OrderHeader");
 
                     b.Navigation("Product");
+
+                    b.Navigation("applicationUser");
                 });
 
             modelBuilder.Entity("apistudy.Models.Entityies.OrderHeader", b =>

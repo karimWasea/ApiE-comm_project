@@ -1,11 +1,18 @@
-﻿using apistudy.Models.Entityies;
+﻿using apistudy.interfaces;
 
-namespace apistudy.interfaces
+namespace Ecommerce_Api.interfaces
 {
-    public interface IUnitOFWork : IDisposable
+    public interface IUnitOFWork :IDisposable
     {
-        IShopingCart shopingCart { get; }
-        IProduct Product { get; }
-        ICategories Categories { get; }
+        
+
+
+
+        public ICategories Categories { get; }
+        public IProduct Product { get; }
+        public IShopingCart shopingCart { get; }
+        public IOrderHeder orderHeder { get; }    
+        public IorderDetails  orderDetails { get; }
+
     }
 }
