@@ -20,7 +20,7 @@ namespace apistudy.Controllers
         [HttpPost("send")]
         public async Task<IActionResult> SendMail([FromForm] MailRequestDto dto)
         {
-            await _mailingService.SendEmailAsync(dto.ToEmail, dto.Subject, dto.Body, dto.Attachments);
+            await _mailingService.SendEmailAsync(dto.ToEmail,   dto.Subject, dto.Body, dto.Attachments);
             return Ok();
         }
 
